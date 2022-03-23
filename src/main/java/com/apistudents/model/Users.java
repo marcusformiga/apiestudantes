@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,8 +36,10 @@ public class Users implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	@Column(unique = true)
 	private String login;
 	private String password;
+	
 	@CreationTimestamp
 	private Instant createdAt;
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
@@ -91,8 +94,9 @@ public class Users implements UserDetails {
 		this.login = login;
 	}
 
+
 	public String getPassword() {
-		return this.password;
+		return password;
 	}
 
 	public void setPassword(String password) {
@@ -142,30 +146,35 @@ public class Users implements UserDetails {
 		return roles;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return this.login;
+		return login;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub

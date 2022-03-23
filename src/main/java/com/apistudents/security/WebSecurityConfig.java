@@ -2,6 +2,7 @@ package com.apistudents.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,11 +36,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.disable().authorizeRequests().antMatchers("/").permitAll()
 			// ativando restricação contra url
 			.antMatchers("/index").permitAll()
+			// liberacao do cors para todos endpoints e metodos
+			.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 			// deslogou do sistema volta para o index
 			.anyRequest().authenticated().and().logout().logoutSuccessUrl("/index")
 			// mapea url de logout e invalida user
 			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-			.and().addFilterBefore(new JWTLoginFilter("/login", authenticationManager()), 
+			.and().addFilterBefore(new JWTLoginFilter("/users/login", authenticationManager()), 
 					UsernamePasswordAuthenticationFilter.class).addFilterBefore(new JwtApiAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 			
 
